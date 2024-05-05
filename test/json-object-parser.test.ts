@@ -68,12 +68,13 @@ describe("JsonObjectParser", () => {
             ).resolves.toBeUndefined();
         });
 
-        test("should call the getString method if the key is defined", async () => {
+        test("should return 'Jaypee' if key specified is 'fullName'", async () => {
             const jsonObject = { fullName: "Jaypee" } as any;
             const jsonObjectParser = new JsonObjectParser(jsonObject);
-            JsonObjectParser.prototype.getString = jest.fn();
-            await jsonObjectParser.getStringOptional("fullName");
-            expect(JsonObjectParser.prototype.getString).toHaveBeenCalled();
+            const fullname = await jsonObjectParser.getStringOptional(
+                "fullName"
+            );
+            expect(fullname).toBe("Jaypee");
         });
     });
 
@@ -148,7 +149,7 @@ describe("JsonObjectParser", () => {
         });
     });
 
-    describe("getStringOptional", () => {
+    describe("getStringArrayOptional", () => {
         test("should return undefined if the key specified is undefined", () => {
             const jsonObjectParser = new JsonObjectParser({});
             expect(
@@ -156,15 +157,11 @@ describe("JsonObjectParser", () => {
             ).resolves.toBeUndefined();
         });
 
-        test("should call getStringArray method if the key is defined", async () => {
-            const jsonObjectParser = new JsonObjectParser({
-                keys: ["Foo Bar", "Fizz Buzz"],
-            });
-            JsonObjectParser.prototype.getStringArray = jest.fn();
-            await jsonObjectParser.getStringArrayOptional("keys");
-            expect(
-                JsonObjectParser.prototype.getStringArray
-            ).toHaveBeenCalled();
+        test("should return ['Foo Bar', 'Fizz Buzz'] if the key specified is 'keys'", async () => {
+            const keys = ["Foo Bar", "Fizz Buzz"];
+            const jsonObjectParser = new JsonObjectParser({ keys });
+            const array = await jsonObjectParser.getStringArrayOptional("keys");
+            expect(array).toEqual(keys);
         });
     });
 
@@ -215,11 +212,10 @@ describe("JsonObjectParser", () => {
             ).resolves.toBeUndefined();
         });
 
-        test("should call the getString method if the key does exist in the object", () => {
-            JsonObjectParser.prototype.getNumber = jest.fn();
+        test("should return 123 if the key specified is 'number'", () => {
             const jsonObjectParser = new JsonObjectParser({ number: 123 });
-            jsonObjectParser.getNumberOptional("number");
-            expect(JsonObjectParser.prototype.getNumber).toHaveBeenCalled();
+            const number = jsonObjectParser.getNumberOptional("number");
+            expect(number).resolves.toBe(123);
         });
     });
 });
