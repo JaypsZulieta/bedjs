@@ -101,4 +101,10 @@ export class JsonObjectParser {
             );
         return value;
     }
+
+    async getNumberArrayOptional(key: string): Promise<number[] | undefined> {
+        const value = this.jsonObject[key];
+        if (value == undefined) return undefined;
+        return this.getNumberArray(key);
+    }
 }
