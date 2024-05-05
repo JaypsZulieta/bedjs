@@ -167,4 +167,43 @@ describe("JsonObjectParser", () => {
             ).toHaveBeenCalled();
         });
     });
+
+    describe("getNumber", () => {
+        test("should throw a BadRequestError if the key specified is undefined", () => {
+            const jsonObjectParser = new JsonObjectParser({});
+            expect(jsonObjectParser.getNumber("number")).rejects.toThrow(
+                BadRequestError
+            );
+        });
+
+        test("should throw an error with message of 'number must not be empty'", () => {
+            const jsonObjectParser = new JsonObjectParser({});
+            expect(jsonObjectParser.getNumber("number")).rejects.toThrow(
+                "number must not be empty"
+            );
+        });
+
+        test("should throw a BadRequestError if the key specified is not a number", () => {
+            const jsonObjectParser = new JsonObjectParser({
+                number: "numbers",
+            });
+            expect(jsonObjectParser.getNumber("number")).rejects.toThrow(
+                BadRequestError
+            );
+        });
+
+        test("should throw an error with the message 'number must be a number'", () => {
+            const jsonObjectParser = new JsonObjectParser({
+                number: "numbers",
+            });
+            expect(jsonObjectParser.getNumber("number")).rejects.toThrow(
+                "number must be a number"
+            );
+        });
+
+        test("should return 4 if the specified key is number", () => {
+            const jsonObjectParser = new JsonObjectParser({ number: 4 });
+            expect(jsonObjectParser.getNumber("number")).resolves.toBe(4);
+        });
+    });
 });
