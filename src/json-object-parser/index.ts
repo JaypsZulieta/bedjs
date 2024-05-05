@@ -58,4 +58,15 @@ export class JsonObjectParser {
         if (value == undefined) return undefined;
         return this.getStringArray(key);
     }
+
+    async getNumber(key: string): Promise<number> {
+        const fullKeyName = this.getFullkeyName(key);
+        const value = this.jsonObject[key] as number;
+        if (value == undefined)
+            throw new BadRequestError(`${fullKeyName} must not be empty`);
+        const parseFailure = !(await z.number().safeParseAsync(value)).success;
+        if (parseFailure)
+            throw new BadRequestError(`${fullKeyName} must be a number`);
+        return value;
+    }
 }
