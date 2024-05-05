@@ -1,8 +1,5 @@
-```
-npm install
-npm run dev
-```
+#BedJs
 
 ```
-open http://localhost:3000
+A facade for HonoJs that makes it more friendly to Object-Oriented-Programmers and provides an easy to use API for parsing JSON request bodies
 ```
