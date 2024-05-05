@@ -6,6 +6,18 @@ beforeEach(() => {
 });
 
 describe("JsonObjectParser", () => {
+    describe("getFullKeyName", () => {
+        test("should return the name of the fullKeyname of a key", () => {
+            const jsonObjectParser = new JsonObjectParser(
+                { name: "John Smith" },
+                "person"
+            );
+            expect(jsonObjectParser.getString("fullName")).rejects.toThrow(
+                "person.fullName must not be empty"
+            );
+        });
+    });
+
     describe("getString", () => {
         test("should throw a BadRequestError when specifying a key that does not exist in the object", () => {
             const jsonObject = { section: "EPYC" } as any;
