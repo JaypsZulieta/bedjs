@@ -206,4 +206,20 @@ describe("JsonObjectParser", () => {
             expect(jsonObjectParser.getNumber("number")).resolves.toBe(4);
         });
     });
+
+    describe("getNumberOptional", () => {
+        test("should return undefined if the specified key does not exist in the object", () => {
+            const jsonObjectParser = new JsonObjectParser({ name: 123 });
+            expect(
+                jsonObjectParser.getNumberOptional("number")
+            ).resolves.toBeUndefined();
+        });
+
+        test("should call the getString method if the key does exist in the object", () => {
+            JsonObjectParser.prototype.getNumber = jest.fn();
+            const jsonObjectParser = new JsonObjectParser({ number: 123 });
+            jsonObjectParser.getNumberOptional("number");
+            expect(JsonObjectParser.prototype.getNumber).toHaveBeenCalled();
+        });
+    });
 });
