@@ -280,4 +280,21 @@ describe("JsonObjectParser", () => {
             );
         });
     });
+
+    describe("getNumberArrayOptional", () => {
+        test("should return undefined if the key does not exist in the object", () => {
+            const jsonObjectParser = new JsonObjectParser({});
+            expect(
+                jsonObjectParser.getNumberArrayOptional("nice")
+            ).resolves.toBeUndefined();
+        });
+
+        test("should return [69, 420] given the key 'nice'", () => {
+            const nice = [69, 420];
+            const jsonObjectParser = new JsonObjectParser({ nice });
+            expect(jsonObjectParser.getNumberArray("nice")).resolves.toEqual(
+                nice
+            );
+        });
+    });
 });
