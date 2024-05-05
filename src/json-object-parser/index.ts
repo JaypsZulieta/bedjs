@@ -69,4 +69,10 @@ export class JsonObjectParser {
             throw new BadRequestError(`${fullKeyName} must be a number`);
         return value;
     }
+
+    async getNumberOptional(key: string): Promise<number | undefined> {
+        const value = this.jsonObject[key] as number;
+        if (value == undefined) return undefined;
+        return this.getNumber(key);
+    }
 }
