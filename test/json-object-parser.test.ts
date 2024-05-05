@@ -218,4 +218,66 @@ describe("JsonObjectParser", () => {
             expect(number).resolves.toBe(123);
         });
     });
+
+    describe("getNumberArray", () => {
+        test("should throw a BadRequestError if the body is not an array if given no key", () => {
+            const jsonObjectParser = new JsonObjectParser({});
+            expect(jsonObjectParser.getNumberArray()).rejects.toThrow(
+                BadRequestError
+            );
+        });
+
+        test("should throw an error with the message 'body must be an array of numbers' if given no key", () => {
+            const jsonObjectParser = new JsonObjectParser({});
+            expect(jsonObjectParser.getNumberArray()).rejects.toThrow(
+                "body must be an array of numbers"
+            );
+        });
+
+        test("should return the array [69, 420] if given no key", () => {
+            const nice = [69, 420];
+            const jsonObjectParser = new JsonObjectParser(nice as any);
+            expect(jsonObjectParser.getNumberArray()).resolves.toEqual(nice);
+        });
+
+        test("should throw a BadRequestError if the key does not exist in the object", () => {
+            const jsonObjectParser = new JsonObjectParser({});
+            expect(jsonObjectParser.getNumberArray("number")).rejects.toThrow(
+                BadRequestError
+            );
+        });
+
+        test("should throw an error with a message of 'number must not be empty' if the key is 'number'", () => {
+            const jsonObjectParser = new JsonObjectParser({});
+            expect(jsonObjectParser.getNumberArray("number")).rejects.toThrow(
+                "number must not be empty"
+            );
+        });
+
+        test("should throw a BadRequestError if the value of the key is not an array of numbers'", () => {
+            const jsonObjectParser = new JsonObjectParser({
+                nice: ["Foo", "Bar"],
+            });
+            expect(jsonObjectParser.getNumberArray("nice")).rejects.toThrow(
+                BadRequestError
+            );
+        });
+
+        test("should throw an error with the messaage of 'nice must be an array of numbers'", () => {
+            const jsonObjectParser = new JsonObjectParser({
+                nice: ["Foo", "Bar"],
+            });
+            expect(jsonObjectParser.getNumberArray("nice")).rejects.toThrow(
+                "nice must be an array of numbers"
+            );
+        });
+
+        test("should return the array [69, 420] if given the key 'nice'", () => {
+            const nice = [69, 420];
+            const jsonObjectParser = new JsonObjectParser({ nice } as any);
+            expect(jsonObjectParser.getNumberArray("nice")).resolves.toEqual(
+                nice
+            );
+        });
+    });
 });
