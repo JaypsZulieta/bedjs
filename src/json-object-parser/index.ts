@@ -75,4 +75,30 @@ export class JsonObjectParser {
         if (value == undefined) return undefined;
         return this.getNumber(key);
     }
+
+    async getNumberArray(key?: string): Promise<number[]> {
+        let value: number[];
+        if (!key) {
+            value = this.jsonObject as number[];
+            if (value == undefined)
+                throw new BadRequestError("body must not be empty");
+            const parseFailure = !(
+                await z.array(z.number()).safeParseAsync(value)
+            ).success;
+            if (parseFailure)
+                throw new BadRequestError("body must be an array of numbers");
+            return value;
+        }
+        value = this.jsonObject[key] as number[];
+        const fullKeyName = this.getFullkeyName(key);
+        if (value == undefined)
+            throw new BadRequestError(`${fullKeyName} must not be empty`);
+        const parseFailure = !(await z.array(z.number()).safeParseAsync(value))
+            .success;
+        if (parseFailure)
+            throw new BadRequestError(
+                `${fullKeyName} must be an array of numbers`
+            );
+        return value;
+    }
 }
