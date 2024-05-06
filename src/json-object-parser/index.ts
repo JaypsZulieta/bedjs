@@ -13,9 +13,11 @@ export class JsonObjectParser {
     async getString(key: string): Promise<string> {
         const value = this.jsonObject[key] as string;
         const fullKeyName = this.getFullkeyName(key);
-        if (!value) throw new BadRequestError(`${fullKeyName} must not be empty`);
+        if (!value)
+            throw new BadRequestError(`${fullKeyName} must not be empty`);
         const parseFailure = !(await z.string().safeParseAsync(value)).success;
-        if (parseFailure) throw new BadRequestError(`${fullKeyName} must be a string`);
+        if (parseFailure)
+            throw new BadRequestError(`${fullKeyName} must be a string`);
         return value;
     }
 
@@ -29,16 +31,25 @@ export class JsonObjectParser {
         let value: string[];
         if (!key) {
             value = this.jsonObject as string[];
-            if (value == undefined) throw new BadRequestError("body must not be empty");
-            const parseFailure = !(await z.array(z.string()).safeParseAsync(value)).success;
-            if (parseFailure) throw new BadRequestError("body must be an array of strings");
+            if (value == undefined)
+                throw new BadRequestError("body must not be empty");
+            const parseFailure = !(
+                await z.array(z.string()).safeParseAsync(value)
+            ).success;
+            if (parseFailure)
+                throw new BadRequestError("body must be an array of strings");
             return value;
         }
         const fullKeyName = this.getFullkeyName(key as string);
         value = this.jsonObject[key] as string[];
-        if (value == undefined) throw new BadRequestError(`${fullKeyName} must not be empty`);
-        const parseFailure = !(await z.array(z.string()).safeParseAsync(value)).success;
-        if (parseFailure) throw new BadRequestError(`${fullKeyName} must be an array of strings`);
+        if (value == undefined)
+            throw new BadRequestError(`${fullKeyName} must not be empty`);
+        const parseFailure = !(await z.array(z.string()).safeParseAsync(value))
+            .success;
+        if (parseFailure)
+            throw new BadRequestError(
+                `${fullKeyName} must be an array of strings`
+            );
         return value;
     }
 
@@ -51,9 +62,11 @@ export class JsonObjectParser {
     async getNumber(key: string): Promise<number> {
         const fullKeyName = this.getFullkeyName(key);
         const value = this.jsonObject[key] as number;
-        if (value == undefined) throw new BadRequestError(`${fullKeyName} must not be empty`);
+        if (value == undefined)
+            throw new BadRequestError(`${fullKeyName} must not be empty`);
         const parseFailure = !(await z.number().safeParseAsync(value)).success;
-        if (parseFailure) throw new BadRequestError(`${fullKeyName} must be a number`);
+        if (parseFailure)
+            throw new BadRequestError(`${fullKeyName} must be a number`);
         return value;
     }
 
@@ -67,16 +80,25 @@ export class JsonObjectParser {
         let value: number[];
         if (!key) {
             value = this.jsonObject as number[];
-            if (value == undefined) throw new BadRequestError("body must not be empty");
-            const parseFailure = !(await z.array(z.number()).safeParseAsync(value)).success;
-            if (parseFailure) throw new BadRequestError("body must be an array of numbers");
+            if (value == undefined)
+                throw new BadRequestError("body must not be empty");
+            const parseFailure = !(
+                await z.array(z.number()).safeParseAsync(value)
+            ).success;
+            if (parseFailure)
+                throw new BadRequestError("body must be an array of numbers");
             return value;
         }
         value = this.jsonObject[key] as number[];
         const fullKeyName = this.getFullkeyName(key);
-        if (value == undefined) throw new BadRequestError(`${fullKeyName} must not be empty`);
-        const parseFailure = !(await z.array(z.number()).safeParseAsync(value)).success;
-        if (parseFailure) throw new BadRequestError(`${fullKeyName} must be an array of numbers`);
+        if (value == undefined)
+            throw new BadRequestError(`${fullKeyName} must not be empty`);
+        const parseFailure = !(await z.array(z.number()).safeParseAsync(value))
+            .success;
+        if (parseFailure)
+            throw new BadRequestError(
+                `${fullKeyName} must be an array of numbers`
+            );
         return value;
     }
 
@@ -89,9 +111,11 @@ export class JsonObjectParser {
     async getBoolean(key: string): Promise<boolean> {
         const fullKeyName = this.getFullkeyName(key);
         const value = this.jsonObject[key] as boolean;
-        if (value == undefined) throw new BadRequestError(`${fullKeyName} must not be empty`);
+        if (value == undefined)
+            throw new BadRequestError(`${fullKeyName} must not be empty`);
         const parseFailure = !(await z.boolean().safeParseAsync(value)).success;
-        if (parseFailure) throw new BadRequestError(`${fullKeyName} must be a boolean`);
+        if (parseFailure)
+            throw new BadRequestError(`${fullKeyName} must be a boolean`);
         return value;
     }
 
@@ -104,13 +128,18 @@ export class JsonObjectParser {
     async getObject(key: string): Promise<JsonObjectParser> {
         const fullKeyName = this.getFullkeyName(key);
         const value = this.jsonObject[key] as any;
-        if (value == undefined) throw new BadRequestError(`${fullKeyName} must not be empty`);
-        const parseFailure = !(await z.object({}).safeParseAsync(value)).success;
-        if (parseFailure) throw new BadRequestError(`${fullKeyName} must be an object`);
+        if (value == undefined)
+            throw new BadRequestError(`${fullKeyName} must not be empty`);
+        const parseFailure = !(await z.object({}).safeParseAsync(value))
+            .success;
+        if (parseFailure)
+            throw new BadRequestError(`${fullKeyName} must be an object`);
         return new JsonObjectParser(value, key);
     }
 
-    async getObjectOptional(key: string): Promise<JsonObjectParser | undefined> {
+    async getObjectOptional(
+        key: string
+    ): Promise<JsonObjectParser | undefined> {
         const value = this.jsonObject[key] as any;
         if (value == undefined) return undefined;
         return this.getObject(key);
@@ -120,16 +149,34 @@ export class JsonObjectParser {
         let value: JsonObjectParser[];
         if (!key) {
             value = this.jsonObject as JsonObjectParser[];
-            if (value == undefined) throw new BadRequestError("body must not be empty");
-            const parseFailure = !(await z.array(z.object({})).safeParseAsync(value)).success;
-            if (parseFailure) throw new BadRequestError("body must be an array of objects");
+            if (value == undefined)
+                throw new BadRequestError("body must not be empty");
+            const parseFailure = !(
+                await z.array(z.object({})).safeParseAsync(value)
+            ).success;
+            if (parseFailure)
+                throw new BadRequestError("body must be an array of objects");
             return value.map((jsonObject) => new JsonObjectParser(jsonObject));
         }
         const fullKeyName = this.getFullkeyName(key);
         value = this.jsonObject[key] as JsonObjectParser[];
-        if (value == undefined) throw new BadRequestError(`${fullKeyName} must not be empty`);
-        const parseFailure = !(await z.array(z.object({})).safeParseAsync(value)).success;
-        if (parseFailure) throw new BadRequestError(`${fullKeyName} must be an array of objects`);
+        if (value == undefined)
+            throw new BadRequestError(`${fullKeyName} must not be empty`);
+        const parseFailure = !(
+            await z.array(z.object({})).safeParseAsync(value)
+        ).success;
+        if (parseFailure)
+            throw new BadRequestError(
+                `${fullKeyName} must be an array of objects`
+            );
         return value.map((jsonObject) => new JsonObjectParser(jsonObject));
+    }
+
+    async getObjectArrayOptional(
+        key: string
+    ): Promise<JsonObjectParser[] | undefined> {
+        const value = this.jsonObject[key] as JsonObjectParser[];
+        if (value == undefined) return undefined;
+        return this.getObjectArray(key);
     }
 }
