@@ -283,4 +283,16 @@ describe("JsonObjectParser", () => {
             expect(jsonObjectParser.getBoolean("isAdmin")).resolves.toBe(true);
         });
     });
+
+    describe("getBooleanOptional", () => {
+        test("should return undefined if the specified key is undefined", () => {
+            const jsonObjectParser = new JsonObjectParser({});
+            expect(jsonObjectParser.getBooleanOptional("isAdmin")).resolves.toBeUndefined();
+        });
+
+        test("should return true if the specified key is isAdmin", () => {
+            const jsonObjectParser = new JsonObjectParser({ isAdmin: true });
+            expect(jsonObjectParser.getBooleanOptional("isAdmin")).resolves.toBe(true);
+        });
+    });
 });
