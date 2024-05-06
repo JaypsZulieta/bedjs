@@ -115,4 +115,21 @@ export class JsonObjectParser {
         if (value == undefined) return undefined;
         return this.getObject(key);
     }
+
+    async getObjectArray(key?: string): Promise<JsonObjectParser[]> {
+        let value: JsonObjectParser[];
+        if (!key) {
+            value = this.jsonObject as JsonObjectParser[];
+            if (value == undefined) throw new BadRequestError("body must not be empty");
+            const parseFailure = !(await z.array(z.object({})).safeParseAsync(value)).success;
+            if (parseFailure) throw new BadRequestError("body must be an array of objects");
+            return value.map((jsonObject) => new JsonObjectParser(jsonObject));
+        }
+        const fullKeyName = this.getFullkeyName(key);
+        value = this.jsonObject[key] as JsonObjectParser[];
+        if (value == undefined) throw new BadRequestError(`${fullKeyName} must not be empty`);
+        const parseFailure = !(await z.array(z.object({})).safeParseAsync(value)).success;
+        if (parseFailure) throw new BadRequestError(`${fullKeyName} must be an array of objects`);
+        return value.map((jsonObject) => new JsonObjectParser(jsonObject));
+    }
 }
