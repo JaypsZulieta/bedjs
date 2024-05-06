@@ -8,10 +8,7 @@ beforeEach(() => {
 describe("JsonObjectParser", () => {
     describe("getFullKeyName", () => {
         test("should return the name of the fullname of a key", () => {
-            const jsonObjectParser = new JsonObjectParser(
-                { name: "John Smith" },
-                "person"
-            );
+            const jsonObjectParser = new JsonObjectParser({ name: "John Smith" }, "person");
             expect(jsonObjectParser.getString("fullName")).rejects.toThrow(
                 "person.fullName must not be empty"
             );
@@ -22,9 +19,7 @@ describe("JsonObjectParser", () => {
         test("should throw a BadRequestError when specifying a key that does not exist in the object", () => {
             const jsonObject = { section: "EPYC" } as any;
             const jsonObjectParser = new JsonObjectParser(jsonObject);
-            expect(jsonObjectParser.getString("fullName")).rejects.toThrow(
-                BadRequestError
-            );
+            expect(jsonObjectParser.getString("fullName")).rejects.toThrow(BadRequestError);
         });
 
         test("should have an error message of 'fullName must not be empty' when specifying a key that does not exist in the object", () => {
@@ -38,9 +33,7 @@ describe("JsonObjectParser", () => {
         test("should throw a BadRequestError when the key specified is not of type string", () => {
             const jsonObject = { fullName: 123 } as any;
             const jsonObjectParser = new JsonObjectParser(jsonObject);
-            expect(jsonObjectParser.getString("fullName")).rejects.toThrow(
-                BadRequestError
-            );
+            expect(jsonObjectParser.getString("fullName")).rejects.toThrow(BadRequestError);
         });
 
         test("should throw an error message of 'keyname must be a string' when the key specified is not of type string", () => {
@@ -63,17 +56,13 @@ describe("JsonObjectParser", () => {
         test("should return undefined if the specified key does not exist in the object", () => {
             const jsonObject = { fullName: "jaypee" } as any;
             const jsonObjectParser = new JsonObjectParser(jsonObject);
-            expect(
-                jsonObjectParser.getStringOptional("lastname")
-            ).resolves.toBeUndefined();
+            expect(jsonObjectParser.getStringOptional("lastname")).resolves.toBeUndefined();
         });
 
         test("should return 'Jaypee' if key specified is 'fullName'", async () => {
             const jsonObject = { fullName: "Jaypee" } as any;
             const jsonObjectParser = new JsonObjectParser(jsonObject);
-            const fullname = await jsonObjectParser.getStringOptional(
-                "fullName"
-            );
+            const fullname = await jsonObjectParser.getStringOptional("fullName");
             expect(fullname).toBe("Jaypee");
         });
     });
@@ -81,24 +70,18 @@ describe("JsonObjectParser", () => {
     describe("getStringArray", () => {
         test("should throw a BadRequestError if the body is undefined", () => {
             const jsonObjectParser = new JsonObjectParser(undefined);
-            expect(jsonObjectParser.getStringArray()).rejects.toThrow(
-                BadRequestError
-            );
+            expect(jsonObjectParser.getStringArray()).rejects.toThrow(BadRequestError);
         });
 
         test("should throw an error with message of 'body must not be empty' if the body is undefined", () => {
             const jsonObjectParser = new JsonObjectParser(undefined);
-            expect(jsonObjectParser.getStringArray()).rejects.toThrow(
-                "body must not be empty"
-            );
+            expect(jsonObjectParser.getStringArray()).rejects.toThrow("body must not be empty");
         });
 
         test("should throw a BadRequestError if the body is not an array of strings", () => {
             const jsonObject = {} as any;
             const jsonObjectParser = new JsonObjectParser(jsonObject);
-            expect(jsonObjectParser.getStringArray()).rejects.toThrow(
-                BadRequestError
-            );
+            expect(jsonObjectParser.getStringArray()).rejects.toThrow(BadRequestError);
         });
 
         test("should throw an error with message of 'body must be an array of strings' if the body is not an array of strings", () => {
@@ -120,16 +103,12 @@ describe("JsonObjectParser", () => {
 
         test("should throw a BadRequestError if the key specified is not definded", () => {
             const jsonObjectParser = new JsonObjectParser({});
-            expect(jsonObjectParser.getStringArray("keyWords")).rejects.toThrow(
-                BadRequestError
-            );
+            expect(jsonObjectParser.getStringArray("keyWords")).rejects.toThrow(BadRequestError);
         });
 
         test("should throw a BadRequestError if the key specified is not an array of strings", () => {
             const jsonObjectParser = new JsonObjectParser({ keys: 123 });
-            expect(jsonObjectParser.getStringArray("keys")).rejects.toThrow(
-                BadRequestError
-            );
+            expect(jsonObjectParser.getStringArray("keys")).rejects.toThrow(BadRequestError);
         });
 
         test("should throw an error with message of 'keys must be an array of strings' if the key specified is otherwise", () => {
@@ -143,18 +122,14 @@ describe("JsonObjectParser", () => {
             const array = ["John Smith", "Foo Bar"];
             const jsonObject = { keyWords: array } as any;
             const jsonObjectParser = new JsonObjectParser(jsonObject);
-            expect(
-                jsonObjectParser.getStringArray("keyWords")
-            ).resolves.toEqual(array);
+            expect(jsonObjectParser.getStringArray("keyWords")).resolves.toEqual(array);
         });
     });
 
     describe("getStringArrayOptional", () => {
         test("should return undefined if the key specified is undefined", () => {
             const jsonObjectParser = new JsonObjectParser({});
-            expect(
-                jsonObjectParser.getStringArrayOptional("keys")
-            ).resolves.toBeUndefined();
+            expect(jsonObjectParser.getStringArrayOptional("keys")).resolves.toBeUndefined();
         });
 
         test("should return ['Foo Bar', 'Fizz Buzz'] if the key specified is 'keys'", async () => {
@@ -168,9 +143,7 @@ describe("JsonObjectParser", () => {
     describe("getNumber", () => {
         test("should throw a BadRequestError if the key specified is undefined", () => {
             const jsonObjectParser = new JsonObjectParser({});
-            expect(jsonObjectParser.getNumber("number")).rejects.toThrow(
-                BadRequestError
-            );
+            expect(jsonObjectParser.getNumber("number")).rejects.toThrow(BadRequestError);
         });
 
         test("should throw an error with message of 'number must not be empty'", () => {
@@ -184,18 +157,14 @@ describe("JsonObjectParser", () => {
             const jsonObjectParser = new JsonObjectParser({
                 number: "numbers",
             });
-            expect(jsonObjectParser.getNumber("number")).rejects.toThrow(
-                BadRequestError
-            );
+            expect(jsonObjectParser.getNumber("number")).rejects.toThrow(BadRequestError);
         });
 
         test("should throw an error with the message 'number must be a number'", () => {
             const jsonObjectParser = new JsonObjectParser({
                 number: "numbers",
             });
-            expect(jsonObjectParser.getNumber("number")).rejects.toThrow(
-                "number must be a number"
-            );
+            expect(jsonObjectParser.getNumber("number")).rejects.toThrow("number must be a number");
         });
 
         test("should return 4 if the specified key is number", () => {
@@ -207,9 +176,7 @@ describe("JsonObjectParser", () => {
     describe("getNumberOptional", () => {
         test("should return undefined if the specified key does not exist in the object", () => {
             const jsonObjectParser = new JsonObjectParser({ name: 123 });
-            expect(
-                jsonObjectParser.getNumberOptional("number")
-            ).resolves.toBeUndefined();
+            expect(jsonObjectParser.getNumberOptional("number")).resolves.toBeUndefined();
         });
 
         test("should return 123 if the key specified is 'number'", () => {
@@ -222,9 +189,7 @@ describe("JsonObjectParser", () => {
     describe("getNumberArray", () => {
         test("should throw a BadRequestError if the body is not an array if given no key", () => {
             const jsonObjectParser = new JsonObjectParser({});
-            expect(jsonObjectParser.getNumberArray()).rejects.toThrow(
-                BadRequestError
-            );
+            expect(jsonObjectParser.getNumberArray()).rejects.toThrow(BadRequestError);
         });
 
         test("should throw an error with the message 'body must be an array of numbers' if given no key", () => {
@@ -242,9 +207,7 @@ describe("JsonObjectParser", () => {
 
         test("should throw a BadRequestError if the key does not exist in the object", () => {
             const jsonObjectParser = new JsonObjectParser({});
-            expect(jsonObjectParser.getNumberArray("number")).rejects.toThrow(
-                BadRequestError
-            );
+            expect(jsonObjectParser.getNumberArray("number")).rejects.toThrow(BadRequestError);
         });
 
         test("should throw an error with a message of 'number must not be empty' if the key is 'number'", () => {
@@ -258,9 +221,7 @@ describe("JsonObjectParser", () => {
             const jsonObjectParser = new JsonObjectParser({
                 nice: ["Foo", "Bar"],
             });
-            expect(jsonObjectParser.getNumberArray("nice")).rejects.toThrow(
-                BadRequestError
-            );
+            expect(jsonObjectParser.getNumberArray("nice")).rejects.toThrow(BadRequestError);
         });
 
         test("should throw an error with the messaage of 'nice must be an array of numbers'", () => {
@@ -275,25 +236,176 @@ describe("JsonObjectParser", () => {
         test("should return the array [69, 420] if given the key 'nice'", () => {
             const nice = [69, 420];
             const jsonObjectParser = new JsonObjectParser({ nice } as any);
-            expect(jsonObjectParser.getNumberArray("nice")).resolves.toEqual(
-                nice
-            );
+            expect(jsonObjectParser.getNumberArray("nice")).resolves.toEqual(nice);
         });
     });
 
     describe("getNumberArrayOptional", () => {
         test("should return undefined if the key does not exist in the object", () => {
             const jsonObjectParser = new JsonObjectParser({});
-            expect(
-                jsonObjectParser.getNumberArrayOptional("nice")
-            ).resolves.toBeUndefined();
+            expect(jsonObjectParser.getNumberArrayOptional("nice")).resolves.toBeUndefined();
         });
 
         test("should return [69, 420] given the key 'nice'", () => {
             const nice = [69, 420];
             const jsonObjectParser = new JsonObjectParser({ nice });
-            expect(jsonObjectParser.getNumberArray("nice")).resolves.toEqual(
-                nice
+            expect(jsonObjectParser.getNumberArray("nice")).resolves.toEqual(nice);
+        });
+    });
+
+    describe("getBoolean", () => {
+        test("should throw a BadRequestError if the specified key is undefined", () => {
+            const jsonObjectParser = new JsonObjectParser({});
+            expect(jsonObjectParser.getBoolean("isAdmin")).rejects.toThrow(BadRequestError);
+        });
+
+        test("should throw an error with message of 'isAdmin must not be empty' if the specified key is undefined", () => {
+            const jsonObjectParser = new JsonObjectParser({});
+            expect(jsonObjectParser.getBoolean("isAdmin")).rejects.toThrow(
+                "isAdmin must not be empty"
+            );
+        });
+
+        test("should throw a BadRequestError if the specified key is not a boolean", () => {
+            const jsonObjectParser = new JsonObjectParser({ isAdmin: "key" });
+            expect(jsonObjectParser.getBoolean("isAdmin")).rejects.toThrow(BadRequestError);
+        });
+
+        test("should throw an error with message of 'isAdmin must be a boolean' if specified key is not a boolean", () => {
+            const jsonObjectParser = new JsonObjectParser({ isAdmin: "123" });
+            expect(jsonObjectParser.getBoolean("isAdmin")).rejects.toThrow(
+                "isAdmin must be a boolean"
+            );
+        });
+
+        test("should return true if the specified key is isAdmin", () => {
+            const jsonObjectParser = new JsonObjectParser({ isAdmin: true });
+            expect(jsonObjectParser.getBoolean("isAdmin")).resolves.toBe(true);
+        });
+    });
+
+    describe("getBooleanOptional", () => {
+        test("should return undefined if the specified key is undefined", () => {
+            const jsonObjectParser = new JsonObjectParser({});
+            expect(jsonObjectParser.getBooleanOptional("isAdmin")).resolves.toBeUndefined();
+        });
+
+        test("should return true if the specified key is isAdmin", () => {
+            const jsonObjectParser = new JsonObjectParser({ isAdmin: true });
+            expect(jsonObjectParser.getBooleanOptional("isAdmin")).resolves.toBe(true);
+        });
+    });
+
+    describe("getObject", () => {
+        test("should throw a BadRequestError if the specified key is not defined", () => {
+            const jsonObjectParser = new JsonObjectParser({});
+            expect(jsonObjectParser.getObject("item")).rejects.toThrow(BadRequestError);
+        });
+
+        test("should throw an error with message of 'item must not be empty' when the specified key is not defined", () => {
+            const jsonObjectParser = new JsonObjectParser({});
+            expect(jsonObjectParser.getObject("item")).rejects.toThrow("item must not be empty");
+        });
+
+        test("should throw a BadRequestError if the specified key is not an Object", () => {
+            const jsonObjectParser = new JsonObjectParser({ item: "Banana" });
+            expect(jsonObjectParser.getObject("item")).rejects.toThrow(BadRequestError);
+        });
+
+        test("should throw an error with message of 'item must be an object' if specified key is not an object", () => {
+            const jsonObjectParser = new JsonObjectParser({ item: "Banana" });
+            expect(jsonObjectParser.getObject("item")).rejects.toThrow("item must be an object");
+        });
+
+        test("should return a JsonObjectParser if the specified key is an object", () => {
+            const jsonObjectParser = new JsonObjectParser({
+                item: { name: "Banana", inStock: true },
+            });
+            expect(jsonObjectParser.getObject("item")).resolves.toBeInstanceOf(JsonObjectParser);
+        });
+    });
+
+    describe("getObjectOptional", () => {
+        test("should return undefined if the specified key is not defined", () => {
+            const jsonObjectParser = new JsonObjectParser({});
+            expect(jsonObjectParser.getObjectOptional("item")).resolves.toBeUndefined();
+        });
+
+        test("should return an instance of JsonObjectParser if the specified key is defined", () => {
+            const jsonObjectParser = new JsonObjectParser({
+                item: { name: "Banana", inStock: true },
+            });
+            expect(jsonObjectParser.getObjectOptional("item")).resolves.toBeInstanceOf(
+                JsonObjectParser
+            );
+        });
+    });
+
+    describe("getObjectArray", () => {
+        test("should throw a BadRequestError if the key is not defined and the body is empty", () => {
+            const jsonObjectParser = new JsonObjectParser(undefined);
+            expect(jsonObjectParser.getObjectArray()).rejects.toThrow(BadRequestError);
+        });
+
+        test("should throw an error with the message of 'body must not be empty' if the key is not defined and the body is empty", () => {
+            const jsonObjectParser = new JsonObjectParser(undefined);
+            expect(jsonObjectParser.getObjectArray()).rejects.toThrow("body must not be empty");
+        });
+
+        test("should throw a BadRequestError if the key is not defined and the body is not an array of objects", () => {
+            const jsonObjectParser = new JsonObjectParser(["Foo", "Bar"]);
+            expect(jsonObjectParser.getObjectArray()).rejects.toThrow(BadRequestError);
+        });
+
+        test("should throw an error with the message of 'body must be an array of objects'", () => {
+            const jsonObjectParser = new JsonObjectParser(["Foo", "Bar"]);
+            expect(jsonObjectParser.getObjectArray()).rejects.toThrow(
+                "body must be an array of objects"
+            );
+        });
+
+        test("should return an array of JsonObjectParsers if given a key 'items'", () => {
+            const items = [
+                { name: "Banana", inStock: true },
+                { name: "Apple", inStock: false },
+            ];
+            const jsonObjectParser = new JsonObjectParser(items);
+            expect(jsonObjectParser.getObjectArray()).resolves.toBeInstanceOf(
+                Array<JsonObjectParser>
+            );
+        });
+
+        test("should throw a BadRequestError if the specified key is undefined", () => {
+            const jsonObjectParser = new JsonObjectParser({});
+            expect(jsonObjectParser.getObjectArray("items")).rejects.toThrow(BadRequestError);
+        });
+
+        test("should throw a error with the message of 'items must not be empty'", () => {
+            const jsonObjectParser = new JsonObjectParser({});
+            expect(jsonObjectParser.getObjectArray("items")).rejects.toThrow(
+                "items must not be empty"
+            );
+        });
+
+        test("should throw a BadRequestError if the specified key is not an array of objects", () => {
+            const jsonObjectParser = new JsonObjectParser({ items: ["Fizz", "Buzz"] });
+            expect(jsonObjectParser.getObjectArray("items")).rejects.toThrow(BadRequestError);
+        });
+
+        test("should throw an error with the message of 'items must be an array of objects' if the specified key is not an array of objects", () => {
+            const jsonObjectParser = new JsonObjectParser({ items: ["Fizz", "Buzz"] });
+            expect(jsonObjectParser.getObjectArray("items")).rejects.toThrow(BadRequestError);
+        });
+
+        test("should return an array of JsonObjectParsers if the specified key is 'items'", () => {
+            const jsonObjectParser = new JsonObjectParser({
+                items: [
+                    { name: "Bananas", inStock: true },
+                    { name: "Bananas", inStock: true },
+                ],
+            });
+            expect(jsonObjectParser.getObjectArray("items")).resolves.toBeInstanceOf(
+                Array<JsonObjectParser>
             );
         });
     });
