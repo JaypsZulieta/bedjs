@@ -295,4 +295,33 @@ describe("JsonObjectParser", () => {
             expect(jsonObjectParser.getBooleanOptional("isAdmin")).resolves.toBe(true);
         });
     });
+
+    describe("getObject", () => {
+        test("should throw a BadRequestError if the specified key is not defined", () => {
+            const jsonObjectParser = new JsonObjectParser({});
+            expect(jsonObjectParser.getObject("item")).rejects.toThrow(BadRequestError);
+        });
+
+        test("should throw an error with message of 'item must not be empty' when the specified key is not defined", () => {
+            const jsonObjectParser = new JsonObjectParser({});
+            expect(jsonObjectParser.getObject("item")).rejects.toThrow("item must not be empty");
+        });
+
+        test("should throw a BadRequestError if the specified key is not an Object", () => {
+            const jsonObjectParser = new JsonObjectParser({ item: "Banana" });
+            expect(jsonObjectParser.getObject("item")).rejects.toThrow(BadRequestError);
+        });
+
+        test("should throw an error with message of 'item must be an object' if specified key is not an object", () => {
+            const jsonObjectParser = new JsonObjectParser({ item: "Banana" });
+            expect(jsonObjectParser.getObject("item")).rejects.toThrow("item must be an object");
+        });
+
+        test("should return a JsonObjectParser if the specified key is an object", () => {
+            const jsonObjectParser = new JsonObjectParser({
+                item: { name: "Banana", inStock: true },
+            });
+            expect(jsonObjectParser.getObject("item")).resolves.toBeInstanceOf(JsonObjectParser);
+        });
+    });
 });
