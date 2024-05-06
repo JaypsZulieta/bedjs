@@ -14,6 +14,14 @@ export class BedRequest {
     constructor(private context: Context) {}
 
     /**
+     * Retrieves the context object containing request information.
+     * @returns {Context} The context object.
+     */
+    getContext(): Context {
+        return this.context;
+    }
+
+    /**
      * Retrieves the path parameter from the request.
      * @param {string} key - The key of the path parameter.
      * @returns {string} The value of the path parameter.
