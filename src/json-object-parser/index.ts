@@ -100,4 +100,13 @@ export class JsonObjectParser {
         if (value == undefined) return undefined;
         return this.getBoolean(key);
     }
+
+    async getObject(key: string): Promise<JsonObjectParser> {
+        const fullKeyName = this.getFullkeyName(key);
+        const value = this.jsonObject[key] as any;
+        if (value == undefined) throw new BadRequestError(`${fullKeyName} must not be empty`);
+        const parseFailure = !(await z.object({}).safeParseAsync(value)).success;
+        if (parseFailure) throw new BadRequestError(`${fullKeyName} must be an object`);
+        return new JsonObjectParser(value, key);
+    }
 }
