@@ -109,4 +109,10 @@ export class JsonObjectParser {
         if (parseFailure) throw new BadRequestError(`${fullKeyName} must be an object`);
         return new JsonObjectParser(value, key);
     }
+
+    async getObjectOptional(key: string): Promise<JsonObjectParser | undefined> {
+        const value = this.jsonObject[key] as any;
+        if (value == undefined) return undefined;
+        return this.getObject(key);
+    }
 }
