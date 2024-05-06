@@ -94,4 +94,10 @@ export class JsonObjectParser {
         if (parseFailure) throw new BadRequestError(`${fullKeyName} must be a boolean`);
         return value;
     }
+
+    async getBooleanOptional(key: string): Promise<boolean | undefined> {
+        const value = this.jsonObject[key] as boolean;
+        if (value == undefined) return undefined;
+        return this.getBoolean(key);
+    }
 }
