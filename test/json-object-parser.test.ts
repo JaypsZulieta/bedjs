@@ -324,4 +324,20 @@ describe("JsonObjectParser", () => {
             expect(jsonObjectParser.getObject("item")).resolves.toBeInstanceOf(JsonObjectParser);
         });
     });
+
+    describe("getObjectOptional", () => {
+        test("should return undefined if the specified key is not defined", () => {
+            const jsonObjectParser = new JsonObjectParser({});
+            expect(jsonObjectParser.getObjectOptional("item")).resolves.toBeUndefined();
+        });
+
+        test("should return an instance of JsonObjectParser if the specified key is defined", () => {
+            const jsonObjectParser = new JsonObjectParser({
+                item: { name: "Banana", inStock: true },
+            });
+            expect(jsonObjectParser.getObjectOptional("item")).resolves.toBeInstanceOf(
+                JsonObjectParser
+            );
+        });
+    });
 });
