@@ -7,9 +7,9 @@ export class BedResponse {
     /**
      * Creates an instance of BedResponse.
      * @param {StatusCode} statusCode - The status code of the response.
-     * @param {unknown} body - The body of the response.
+     * @param {any} body - The body of the response.
      */
-    constructor(private statusCode: StatusCode, private body: unknown) {}
+    constructor(private statusCode: StatusCode, private body: any) {}
 
     /**
      * Retrieves the status code of the response.
@@ -21,9 +21,9 @@ export class BedResponse {
 
     /**
      * Retrieves the body of the response.
-     * @returns {unknown} The body of the response.
+     * @returns {any} The body of the response.
      */
-    getBody(): unknown {
+    getBody(): any {
         return this.body;
     }
 }
