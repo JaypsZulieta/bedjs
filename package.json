@@ -7,7 +7,11 @@
         "Object-Oriented-Programming",
         "TypeScript"
     ],
+    "main": "./dist/index.js",
+    "module": "./dist/index.mjs",
+    "types": "./dist/index.d.ts",
     "author": "sexy-turtle5417",
+    "files": ["dist"],
     "license": "ISC",
     "scripts": {
         "dev": "tsx watch src/index.ts",
