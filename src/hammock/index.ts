@@ -1,10 +1,12 @@
-import { Hono } from "hono";
+import { Hono, Context } from "hono";
 import { serve } from "@hono/node-server";
 import { DELETERoute } from "../routes/delete.route";
 import { GETRoute } from "../routes/get.route";
 import { PATCHRoute } from "../routes/patch.route";
 import { POSTRoute } from "../routes/post.route";
 import { PUTRoute } from "../routes/put.route";
+import { BedRequest } from "../bed-request";
+import { HttpError } from "../errors/http.error";
 
 export class Hammock {
     private GETRoutes: GETRoute[] = [];
@@ -22,6 +24,12 @@ export class Hammock {
      * @returns {ServerType} The server instance.
      */
     rest() {
+        this.initializeGETRoutes();
+        this.initializePOSTRoutes();
+        this.initializePUTRoutes();
+        this.initializePATCHRoutes();
+        this.initializeDELETERoutes();
+        this.initializeErrorHandling();
         console.log(`server started on port ${this.port}`);
         return serve({ fetch: this.hono.fetch, port: this.port });
     }
@@ -64,5 +72,85 @@ export class Hammock {
      */
     addDELETERoute(route: DELETERoute): void {
         this.DELETERoutes.push(route);
+    }
+
+    /**
+     * Initializes GET routes for the API.
+     */
+    private initializeGETRoutes(): void {
+        this.GETRoutes.forEach((route) => {
+            this.hono.get(route.getURI(), async (context: Context) => {
+                const response = await route.GET(new BedRequest(context));
+                context.status(response.getStatusCode());
+                return context.json(response.getBody());
+            });
+        });
+    }
+
+    /**
+     * Initializes POST routes for the API.
+     */
+    private initializePOSTRoutes(): void {
+        this.POSTRoutes.forEach((route) => {
+            this.hono.post(route.getURI(), async (context: Context) => {
+                const response = await route.POST(new BedRequest(context));
+                context.status(response.getStatusCode());
+                return context.json(response.getBody());
+            });
+        });
+    }
+
+    /**
+     * Initializes PUT routes for the API.
+     */
+    private initializePUTRoutes(): void {
+        this.PUTRoutes.forEach((route) => {
+            this.hono.put(route.getURI(), async (context: Context) => {
+                const response = await route.PUT(new BedRequest(context));
+                context.status(response.getStatusCode());
+                return context.json(response.getBody());
+            });
+        });
+    }
+
+    /**
+     * Initializes PATCH routes for the API.
+     */
+    private initializePATCHRoutes(): void {
+        this.PATCHRoutes.forEach((route) => {
+            this.hono.patch(route.getURI(), async (context: Context) => {
+                const response = await route.PATCH(new BedRequest(context));
+                context.status(response.getStatusCode());
+                return context.json(response.getBody());
+            });
+        });
+    }
+
+    /**
+     * Initializes DELETE routes for the API.
+     */
+    private initializeDELETERoutes(): void {
+        this.DELETERoutes.forEach((route) => {
+            this.hono.delete(route.getURI(), async (context: Context) => {
+                const response = await route.DELETE(new BedRequest(context));
+                context.status(response.getStatusCode());
+                return context.json(response.getBody());
+            });
+        });
+    }
+
+    /**
+     * Initializes the error handling for the API.
+     */
+    private initializeErrorHandling(): void {
+        this.hono.onError(async (error: Error, context: Context) => {
+            if (error instanceof HttpError) {
+                const response = await error.sendResponse();
+                context.status(response.getStatusCode());
+                return context.json(response.getBody());
+            }
+            context.status(500);
+            return context.json({ message: "server error" });
+        });
     }
 }
