@@ -13,5 +13,5 @@ export interface POSTRoute extends HttpRoute {
      * @param {BedRequest} request - The request object.
      * @returns {Promise<BedResponse>} A promise that resolves to the response object.
      */
-    POST(reqeust: BedRequest): Promise<BedResponse>;
+    POST(request: BedRequest): Promise<BedResponse>;
 }
