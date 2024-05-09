@@ -1,6 +1,6 @@
 {
     "name": "hammockjs",
-    "version": "0.3.0",
+    "version": "0.3.1",
     "description": "A facade for HonoJs that makes it more friendly to Object-Oriented-Programmers and provides an easy to use API for parsing JSON request bodies",
     "keywords": [
         "Hono",
@@ -11,7 +11,9 @@
     "module": "./dist/index.mjs",
     "types": "./dist/index.d.ts",
     "author": "sexy-turtle5417",
-    "files": ["dist"],
+    "files": [
+        "dist"
+    ],
     "license": "ISC",
     "scripts": {
         "dev": "tsx watch src/index.ts",
