@@ -150,6 +150,7 @@ export class Hammock {
                 return context.json(response.getBody());
             }
             context.status(500);
+            console.error(error);
             return context.json({ message: "server error" });
         });
     }
