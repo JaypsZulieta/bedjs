@@ -145,6 +145,7 @@ export class Hammock {
     private initializeErrorHandling(): void {
         this.hono.onError(async (error: Error, context: Context) => {
             if (error instanceof HttpError) {
+                console.log(error);
                 const response = await error.sendResponse();
                 context.status(response.getStatusCode());
                 return context.json(response.getBody());
